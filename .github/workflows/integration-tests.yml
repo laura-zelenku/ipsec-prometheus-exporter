@@ -1,0 +1,71 @@
+name: integration tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ '*' ]
+
+jobs:
+  test:
+    name: integration-test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v6
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        cache: false
+        go-version-file: go.mod
+      id: go
+
+    - name: Start strongSwan containers
+      run: |
+        cd it
+        docker compose -p it up -d
+        cd ..
+
+    - name: Wait for strongSwan to be ready
+      run: |
+        echo "Waiting for strongSwan VPN client and server to start..."
+        sleep 10
+
+        # Wait for VICI API to be accessible on vpn-server
+        timeout 60 bash -c 'until docker exec vpn-server swanctl --version > /dev/null 2>&1; do echo "Waiting for vpn-server..."; sleep 2; done' || true
+        timeout 60 bash -c 'until docker exec vpn-client swanctl --version > /dev/null 2>&1; do echo "Waiting for vpn-client..."; sleep 2; done' || true
+        echo "strongSwan containers are ready"
+
+    - name: Initiate strongSwan connection
+      run: |
+        docker exec vpn-client swanctl --initiate --child net
+        echo "Waiting for strongSwan connection initiation..."
+        sleep 5
+
+    - name: Check strongSwan status
+      run: |
+        echo "=== VPN Server Status ==="
+        docker exec vpn-server swanctl --list-conns || true
+        docker exec vpn-server swanctl --list-sas || true
+
+        echo "=== VPN Client Status ==="
+        docker exec vpn-client swanctl --list-conns || true
+        docker exec vpn-client swanctl --list-sas || true
+
+    - name: Run integration tests
+      run: go test -tags=integration ./it -count=1 -v
+
+    - name: Show strongSwan logs on failure
+      if: failure()
+      run: |
+        echo "=== VPN Server Logs ==="
+        docker logs vpn-server
+        echo "=== VPN Client Logs ==="
+        docker logs vpn-client
+
+    - name: Cleanup
+      if: always()
+      run: |
+        cd it
+        docker compose down -v
