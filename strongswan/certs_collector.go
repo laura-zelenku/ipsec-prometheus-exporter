@@ -77,7 +77,7 @@ func (c *CertsCollector) collectCertMetrics(certs []Cert, ch chan<- prometheus.M
 	now := c.now()
 	for _, cert := range certs {
 		if cert.Type != typeX509Cert {
-			log.Logger.Warnf("Unknown certificate type: '%s'", cert.Type)
+			log.Logger.Warnf("Unknown certificate type: '%v'", cert.Type)
 			continue
 		}
 
@@ -138,7 +138,7 @@ func (c *CertsCollector) listCerts() ([]Cert, error) {
 			return nil, err
 		}
 		if m.Get(keyType) != typeX509Cert {
-			log.Logger.Debugf("Unknown certificate type: '%s'", m.Get(keyType))
+			log.Logger.Debugf("Unknown certificate type: '%v'", m.Get(keyType))
 			continue
 		}
 
