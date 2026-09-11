@@ -432,9 +432,9 @@ func TestSasCollector_MetricsChild(t *testing.T) {
 				msg.Set("local-ts", []string{"local-ts-1", "local-ts-2"})
 				msg.Set("remote-ts", []string{"remote-ts-1", "remote-ts-2"})
 			},
-			metricName:        "swtest_sa_inbound_bytes",
+			metricName:        "swtest_sa_inbound_bytes_total",
 			wantMetricsHelp:   "Number of input bytes processed",
-			wantMetricsType:   "gauge",
+			wantMetricsType:   "counter",
 			wantMetricsLabels: `child_id="sa-unique-id",child_name="sa-name",ike_id="some-unique-id",ike_name="ike-name",local_ts="local-ts-1;local-ts-2",remote_ts="remote-ts-1;remote-ts-2"`,
 			wantMetricsValue:  125,
 		},
@@ -445,9 +445,9 @@ func TestSasCollector_MetricsChild(t *testing.T) {
 				msg.Set("local-ts", []string{"local-ts-1", "local-ts-2"})
 				msg.Set("remote-ts", []string{"remote-ts-1", "remote-ts-2"})
 			},
-			metricName:        "swtest_sa_inbound_packets",
+			metricName:        "swtest_sa_inbound_packets_total",
 			wantMetricsHelp:   "Number of input packets processed",
-			wantMetricsType:   "gauge",
+			wantMetricsType:   "counter",
 			wantMetricsLabels: `child_id="sa-unique-id",child_name="sa-name",ike_id="some-unique-id",ike_name="ike-name",local_ts="local-ts-1;local-ts-2",remote_ts="remote-ts-1;remote-ts-2"`,
 			wantMetricsValue:  125,
 		},
@@ -471,9 +471,9 @@ func TestSasCollector_MetricsChild(t *testing.T) {
 				msg.Set("local-ts", []string{"local-ts-1", "local-ts-2"})
 				msg.Set("remote-ts", []string{"remote-ts-1", "remote-ts-2"})
 			},
-			metricName:        "swtest_sa_outbound_bytes",
+			metricName:        "swtest_sa_outbound_bytes_total",
 			wantMetricsHelp:   "Number of output bytes processed",
-			wantMetricsType:   "gauge",
+			wantMetricsType:   "counter",
 			wantMetricsLabels: `child_id="sa-unique-id",child_name="sa-name",ike_id="some-unique-id",ike_name="ike-name",local_ts="local-ts-1;local-ts-2",remote_ts="remote-ts-1;remote-ts-2"`,
 			wantMetricsValue:  125,
 		},
@@ -484,9 +484,9 @@ func TestSasCollector_MetricsChild(t *testing.T) {
 				msg.Set("local-ts", []string{"local-ts-1", "local-ts-2"})
 				msg.Set("remote-ts", []string{"remote-ts-1", "remote-ts-2"})
 			},
-			metricName:        "swtest_sa_outbound_packets",
+			metricName:        "swtest_sa_outbound_packets_total",
 			wantMetricsHelp:   "Number of output packets processed",
-			wantMetricsType:   "gauge",
+			wantMetricsType:   "counter",
 			wantMetricsLabels: `child_id="sa-unique-id",child_name="sa-name",ike_id="some-unique-id",ike_name="ike-name",local_ts="local-ts-1;local-ts-2",remote_ts="remote-ts-1;remote-ts-2"`,
 			wantMetricsValue:  125,
 		},

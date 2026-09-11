@@ -146,12 +146,12 @@ func NewSasCollector(prefix string, viciClientFn viciClientFn) prometheus.Collec
 			[]string{"ike_name", "ike_id", "child_name", "child_id", "algorithm", "dh_group"}, nil,
 		),
 		saBytesIn: prometheus.NewDesc(
-			prefix+"sa_inbound_bytes",
+			prefix+"sa_inbound_bytes_total",
 			"Number of input bytes processed",
 			[]string{"ike_name", "ike_id", "child_name", "child_id", "local_ts", "remote_ts"}, nil,
 		),
 		saPacketsIn: prometheus.NewDesc(
-			prefix+"sa_inbound_packets",
+			prefix+"sa_inbound_packets_total",
 			"Number of input packets processed",
 			[]string{"ike_name", "ike_id", "child_name", "child_id", "local_ts", "remote_ts"}, nil,
 		),
@@ -161,12 +161,12 @@ func NewSasCollector(prefix string, viciClientFn viciClientFn) prometheus.Collec
 			[]string{"ike_name", "ike_id", "child_name", "child_id", "local_ts", "remote_ts"}, nil,
 		),
 		saBytesOut: prometheus.NewDesc(
-			prefix+"sa_outbound_bytes",
+			prefix+"sa_outbound_bytes_total",
 			"Number of output bytes processed",
 			[]string{"ike_name", "ike_id", "child_name", "child_id", "local_ts", "remote_ts"}, nil,
 		),
 		saPacketsOut: prometheus.NewDesc(
-			prefix+"sa_outbound_packets",
+			prefix+"sa_outbound_packets_total",
 			"Number of output packets processed",
 			[]string{"ike_name", "ike_id", "child_name", "child_id", "local_ts", "remote_ts"}, nil,
 		),
@@ -359,13 +359,13 @@ func (c *SasCollector) collectIkeChildMetrics(name string, uniqueID string, chil
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.saBytesIn,
-		prometheus.GaugeValue,
+		prometheus.CounterValue,
 		float64(childIkeSa.BytesIn),
 		name, uniqueID, childIkeSa.Name, childIkeSa.UniqueID, localTSs, remoteTSs,
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.saPacketsIn,
-		prometheus.GaugeValue,
+		prometheus.CounterValue,
 		float64(childIkeSa.PacketsIn),
 		name, uniqueID, childIkeSa.Name, childIkeSa.UniqueID, localTSs, remoteTSs,
 	)
@@ -377,13 +377,13 @@ func (c *SasCollector) collectIkeChildMetrics(name string, uniqueID string, chil
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.saBytesOut,
-		prometheus.GaugeValue,
+		prometheus.CounterValue,
 		float64(childIkeSa.BytesOut),
 		name, uniqueID, childIkeSa.Name, childIkeSa.UniqueID, localTSs, remoteTSs,
 	)
 	ch <- prometheus.MustNewConstMetric(
 		c.saPacketsOut,
-		prometheus.GaugeValue,
+		prometheus.CounterValue,
 		float64(childIkeSa.PacketsOut),
 		name, uniqueID, childIkeSa.Name, childIkeSa.UniqueID, localTSs, remoteTSs,
 	)
